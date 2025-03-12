@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>りょうまカウンター</title>
     <!-- ファビコン設定 -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" href="favicon.ico?ver=2">
     
     <!-- Google AdSense (広告コード) -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -160,16 +160,8 @@ footer a:hover {
     </div>
 
     <button onclick="analyzeData()">カウント開始</button>
-   <!-- Google AdSense 広告枠（ボタンの下） -->
-         <ins class="adsbygoogle"
-         style="display:block; margin-top:20px;"
-         data-ad-client="ca-pub-7239603500833064"
-         data-ad-slot="6205980635"
-         data-ad-format="auto"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-   <div class="result-container">
+
+    <div class="result-container">
         <div class="result-card">
             <h3>■ 1列目の出現回数</h3>
             <div id="leftResult"></div>
@@ -220,8 +212,21 @@ footer a:hover {
             document.getElementById("rightResult").innerHTML = getTopCounts(rightCounts, rightTopN);
         }
     </script>
-</body>
+
+<!-- フッターの上に広告枠を配置 -->
+<div class="ad-container">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-7239603500833064"
+        data-ad-slot="6205980635"
+        data-ad-format="auto"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
 <footer>
     <center>created by <a href="https://doragonhorse.blog.fc2.com/" target="_blank">龍馬一閃</a></center>
 </footer>
+</body>
 </html>
