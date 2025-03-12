@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>りょうまカウンター</title>
+    <!-- ファビコン設定 -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Google AdSense (広告コード) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-7239603500833064",
+              enable_page_level_ads: true
+         });
+    </script>
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -89,35 +101,55 @@
             font-size: 18px;
             margin-bottom: 10px;
         }
+
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+footer a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+
     </style>
 </head>
 <body>
 
     <h2>りょうまカウンター</h2>
-    <p>データを貼り付けて「カウント開始」ボタンを押してください。</p>
+    <p>データを貼り付けて「カウント開始」ボタンを押してください。人気 組番 オッズのタイトル部分も忘れないで入れましょう♪</p>
     
     <textarea id="inputData" placeholder="人気 組番 オッズ&#10;1 8-5-6 18.6&#10;2 8-6-5 22.7&#10;3 8-5-9 23.3&#10;..."></textarea>
 
     <div class="select-container">
-        <label>左TOP
+        <label>1列目の数
             <select id="leftTop">
                 <option value="1">1</option>
-                <option value="2" selected>2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-        </label>
-
-        <label>中央TOP
-            <select id="middleTop">
-                <option value="1">1</option>
-                <option value="2" selected>2</option>
-                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
                 <option value="5">5</option>
             </select>
         </label>
 
-        <label>右TOP
+        <label>2列目の数
+            <select id="middleTop">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="5">5</option>
+            </select>
+        </label>
+
+        <label>3列目の数
             <select id="rightTop">
                 <option value="3">3</option>
                 <option value="5">5</option>
@@ -128,20 +160,28 @@
     </div>
 
     <button onclick="analyzeData()">カウント開始</button>
-
-    <div class="result-container">
+   <!-- Google AdSense 広告枠（ボタンの下） -->
+         <ins class="adsbygoogle"
+         style="display:block; margin-top:20px;"
+         data-ad-client="ca-pub-7239603500833064"
+         data-ad-slot="6205980635"
+         data-ad-format="auto"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+   <div class="result-container">
         <div class="result-card">
-            <h3>■ 1着の出現回数</h3>
+            <h3>■ 1列目の出現回数</h3>
             <div id="leftResult"></div>
         </div>
         
         <div class="result-card">
-            <h3>■ 2着の出現回数</h3>
+            <h3>■ 2列目の出現回数</h3>
             <div id="middleResult"></div>
         </div>
 
         <div class="result-card">
-            <h3>■ 3着の出現回数</h3>
+            <h3>■ 3列目の出現回数</h3>
             <div id="rightResult"></div>
         </div>
     </div>
@@ -180,6 +220,8 @@
             document.getElementById("rightResult").innerHTML = getTopCounts(rightCounts, rightTopN);
         }
     </script>
-
 </body>
+<footer>
+    <center>created by <a href="https://doragonhorse.blog.fc2.com/" target="_blank">龍馬一閃</a></center>
+</footer>
 </html>
