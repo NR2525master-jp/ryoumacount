@@ -1,0 +1,241 @@
+/* 全体設定 */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ヘッダー */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px; /* 上下の余白を狭め、左右の余白を広げて中央寄せにする */
+    background-color: #333;
+    color: white;
+    width: 100%;
+    box-sizing: border-box; /* paddingを含めた幅を指定 */
+    position: fixed; /* ヘッダーを固定 */
+    top: 0; /* 上端に配置 */
+    left: 0; /* 左端に配置 */
+}
+
+/* ヘッダーのロゴやタイトル */
+header h2 {
+    margin: 0; /* h2のデフォルトのマージンを無くす */
+    flex-grow: 1; /* 残りのスペースを占めてタイトルを中央に配置 */
+    text-align: center; /* 中央揃え */
+}
+
+.hamburger {
+    font-size: 30px;
+    cursor: pointer;
+    display: block;
+}
+
+/* サイドバー */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #1E2A38;
+    color: #E0E6ED;
+    padding-top: 50px;
+    transition: 0.3s;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar .close-btn {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* コンテンツエリア */
+.content {
+    padding: 20px;
+}
+
+/* ハンバーガーメニューが開いた時にサイドバーの状態を変更 */
+.sidebar.open {
+    left: 0;
+}
+
+body.sidebar-open .hamburger {
+    display: none;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #1E2A38;
+    color: #E0E6ED;
+    text-align: center;
+    padding: 20px;
+    padding-bottom: 100px; /* フッター分のスペース */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h2 {
+    color: #F5A623;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 14px;
+    color: #B0BEC5;
+}
+
+textarea {
+    width: 90%;
+    height: 150px;
+    border: 2px solid #37474F;
+    background: #263238;
+    color: white;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.select-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 2px solid #F5A623;
+    background: #263238;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button {
+    background: #F5A623;
+    color: #263238;
+    font-size: 16px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #FFA726;
+    transform: scale(1.05);
+}
+
+.result-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.result-card {
+    background: #263238;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 30%;
+}
+
+.result-card h3 {
+    color: #F5A623;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+
+footer {
+    background-color: #333;
+    display: flex; /* フレックスボックスに変更 */
+    justify-content: center; /* 中央寄せ */
+    align-items: center; /* 垂直方向の中央寄せ */
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box; /* paddingを含めた幅を指定 */
+    left: 0; /* 左端に固定 */
+    right: 0; /* 右端に固定 */
+}
+
+footer a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+
+footer p {
+    margin: 0; /* <p>タグのデフォルトマージンをリセット */
+}
+
+footer a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.instruction-box {
+    background-color: #f7f7f7;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.instruction-box h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.instruction-box ol {
+    margin-left: 20px;
+}
+
+.instruction-box li {
+    margin-bottom: 8px;
+}

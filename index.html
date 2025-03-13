@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-7239603500833064">
     <title>りょうまカウンター</title>
+    
     <!-- ファビコン設定 -->
     <link rel="icon" href="favicon.ico?ver=2">
     
@@ -17,118 +18,33 @@
          });
     </script>
 
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #1E2A38;
-            color: #E0E6ED;
-            text-align: center;
-            padding: 20px;
-        }
-
-        h2 {
-            color: #F5A623;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 14px;
-            color: #B0BEC5;
-        }
-
-        textarea {
-            width: 90%;
-            height: 150px;
-            border: 2px solid #37474F;
-            background: #263238;
-            color: white;
-            font-size: 14px;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .select-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        select {
-            padding: 8px;
-            border-radius: 6px;
-            border: 2px solid #F5A623;
-            background: #263238;
-            color: white;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        button {
-            background: #F5A623;
-            color: #263238;
-            font-size: 16px;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #FFA726;
-            transform: scale(1.05);
-        }
-
-        .result-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .result-card {
-            background: #263238;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 30%;
-        }
-
-        .result-card h3 {
-            color: #F5A623;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 14px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-footer a {
-    color: #ffcc00;
-    text-decoration: none;
-}
-footer a:hover {
-    text-decoration: underline;
-}
-
-    </style>
+    <!-- CSSの読み込み -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- ヘッダー -->
+    <header>
+        <div class="hamburger" id="hamburger" onclick="toggleSidebar()">&#9776;</div>
+        <h2>りょうまカウンター</h2>
+    </header>
 
-    <h2>りょうまカウンター</h2>
-    <p>データを貼り付けて「カウント開始」ボタンを押してください。人気 組番 オッズのタイトル部分も忘れないで入れましょう♪</p>
-    
+    <!-- サイドバー -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleSidebar()"><<</button>
+        <ul>
+            <li><a href="page1.html">使い方</a></li>
+            <li><a href="page2.html">誕生の道のり</a></li>
+            <li><a href="page3.html">秘密のコンテンツ</a></li>
+            <li><a href="https://doragonhorse.blog.fc2.com/" target="_blank">龍馬一閃ブログ</a></li>
+            <li><a href="https://www.youtube.com/@ryoumaissen" target="_blank">龍馬一閃チャンネル</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <p>データを貼り付けて「カウント開始」ボタンを押してください。人気 組番 オッズのタイトル部分も忘れないで入れましょう♪</p>
+        <!-- 他のコンテンツ -->
+    </div>
+
     <textarea id="inputData" placeholder="人気 組番 オッズ&#10;1 8-5-6 18.6&#10;2 8-6-5 22.7&#10;3 8-5-9 23.3&#10;..."></textarea>
 
     <div class="select-container">
@@ -137,6 +53,7 @@ footer a:hover {
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3" selected>3</option>
+                <option value="4">4</option>
                 <option value="5">5</option>
             </select>
         </label>
@@ -145,16 +62,23 @@ footer a:hover {
             <select id="middleTop">
                 <option value="1">1</option>
                 <option value="2">2</option>
-                <option value="3" selected>3</option>
+                <option value="3">3</option>
+                <option value="4" selected>4</option>
                 <option value="5">5</option>
             </select>
         </label>
 
         <label>3列目の数
             <select id="rightTop">
+                <option value="1">1</option>
+                <option value="2">2</option>
                 <option value="3">3</option>
+                <option value="4">4</option>
                 <option value="5">5</option>
+                <option value="6">6</option>
                 <option value="7" selected>7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
                 <option value="10">10</option>
             </select>
         </label>
@@ -179,55 +103,24 @@ footer a:hover {
         </div>
     </div>
 
-    <script>
-        function analyzeData() {
-            const inputText = document.getElementById("inputData").value;
-            const lines = inputText.split("\n").slice(1).filter(line => line.trim() !== "");
+    <!-- JavaScriptの読み込み -->
+    <script src="script.js"></script>
 
-            let leftCounts = {}, middleCounts = {}, rightCounts = {};
-
-            lines.forEach(line => {
-                const parts = line.split(/\s+/);
-                if (parts.length < 3) return;
-                const [left, middle, right] = parts[1].split('-');
-
-                leftCounts[left] = (leftCounts[left] || 0) + 1;
-                middleCounts[middle] = (middleCounts[middle] || 0) + 1;
-                rightCounts[right] = (rightCounts[right] || 0) + 1;
-            });
-
-            function getTopCounts(counts, topN) {
-                return Object.entries(counts)
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, topN)
-                    .map(([num, count]) => `<strong>${num}</strong>: ${count}回`)
-                    .join("<br>");
-            }
-
-            const leftTopN = parseInt(document.getElementById("leftTop").value);
-            const middleTopN = parseInt(document.getElementById("middleTop").value);
-            const rightTopN = parseInt(document.getElementById("rightTop").value);
-
-            document.getElementById("leftResult").innerHTML = getTopCounts(leftCounts, leftTopN);
-            document.getElementById("middleResult").innerHTML = getTopCounts(middleCounts, middleTopN);
-            document.getElementById("rightResult").innerHTML = getTopCounts(rightCounts, rightTopN);
-        }
-    </script>
-
-<!-- フッターの上に広告枠を配置 -->
-<div class="ad-container">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-7239603500833064"
-        data-ad-slot="6205980635"
-        data-ad-format="auto"></ins>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-</div>
-<footer>
-    <center>created by <a href="https://doragonhorse.blog.fc2.com/" target="_blank">龍馬一閃</a></center>
-</footer>
+    <!-- フッターの上に広告枠を配置 -->
+    <div class="ad-container">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-7239603500833064"
+            data-ad-slot="6205980635"
+            data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+    
+    <footer>
+        <span>created by <a href="https://doragonhorse.blog.fc2.com/" target="_blank">龍馬一閃</a></span>
+    </footer>
 </body>
 </html>
