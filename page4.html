@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ファビコン設定 -->
+    <link rel="icon" href="favicon.ico?ver=2">
+    <title>龍馬一閃ABCD馬券術</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        /* カード共通スタイル */
+        .card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* テキストエリアのリサイズ設定 */
+        textarea {
+            resize: vertical;
+        }
+
+        /* ABCD評価馬の枠別表示 */
+        .waku-card {
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .waku-a {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, #fef3c7 0%, #ffffff 100%);
+        }
+
+        .waku-b {
+            border-left-color: #8b5cf6;
+            background: linear-gradient(135deg, #ddd6fe 0%, #ffffff 100%);
+        }
+
+        .waku-c {
+            border-left-color: #3b82f6;
+            background: linear-gradient(135deg, #bfdbfe 0%, #ffffff 100%);
+        }
+
+        .waku-d {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, #bbf7d0 0%, #ffffff 100%);
+        }
+
+        /* 組み合わせ表示の改善 */
+        .combination-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .combination-item {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            transition: all 0.2s ease;
+            word-break: break-all;
+            display: flex;
+            align-items: center;
+            min-height: 44px;
+        }
+
+        .combination-item:hover {
+            background-color: #e2e8f0;
+            transform: translateX(4px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* エラーメッセージ */
+        .error-message {
+            color: #ef4444;
+            font-weight: 500;
+        }
+
+        /* レスポンシブ調整 */
+        @media (max-width: 768px) {
+            .combination-item {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.75rem;
+                min-height: 40px;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8 lg:p-10">
+    <div class="max-w-6xl mx-auto bg-white p-6 sm:p-8 md:p-10 card">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">龍馬一閃～ABCD馬券術～</h1>
+            <p class="text-lg text-gray-600">衝撃のABCD評価で馬券をズバリ！</p>
+        </header>
+
+        <main>
+            <!-- データ入力セクション -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- 単勝オッズ入力 -->
+                <section class="p-6 bg-green-50 card">
+                    <h2 class="text-xl font-semibold text-green-800 mb-4">単勝オッズデータ</h2>
+                    <textarea
+                        id="tanshoInput"
+                        rows="8"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-800 text-sm"
+                        placeholder="単勝オッズデータを貼り付け&#10;（人気&#9;枠&#9;馬番&#9;馬名&#9;単勝）"
+                    ></textarea>
+                </section>
+
+                <!-- 枠連オッズ入力 -->
+                <section class="p-6 bg-blue-50 card">
+                    <h2 class="text-xl font-semibold text-blue-800 mb-4">枠連オッズデータ</h2>
+                    <textarea
+                        id="wakurenInput"
+                        rows="8"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 text-sm"
+                        placeholder="枠連オッズデータを貼り付け&#10;（人気&#9;組番&#9;オッズ）"
+                    ></textarea>
+                </section>
+
+                <!-- 馬連オッズ入力 -->
+                <section class="p-6 bg-purple-50 card">
+                    <h2 class="text-xl font-semibold text-purple-800 mb-4">馬連オッズデータ</h2>
+                    <textarea
+                        id="umarenInput"
+                        rows="8"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-800 text-sm"
+                        placeholder="馬連オッズデータを貼り付け&#10;（人気&#9;組番&#9;オッズ）"
+                    ></textarea>
+                </section>
+            </div>
+
+            <!-- 予想出力ボタン -->
+            <div class="text-center mb-8">
+                <button
+                    id="analyzeButton"
+                    class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-lg"
+                >
+                    予想出力
+                </button>
+            </div>
+
+            <!-- 結果表示セクション（縦並び） -->
+            <div class="space-y-6">
+                <!-- ABCD評価馬 -->
+                <section class="p-6 bg-yellow-50 card">
+                    <div id="abcdResult" class="min-h-[200px]">
+                        <div class="text-center text-gray-600 py-8">
+                            <p>予想出力ボタンを押すと結果が表示されます。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 馬連組み合わせ -->
+                <section class="p-6 bg-red-50 card">
+                    <div id="combinationResult" class="min-h-[200px]">
+                        <div class="text-center text-gray-600 py-8">
+                            <p>予想出力ボタンを押すと結果が表示されます。</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>&copy; 2025 龍馬一閃～ABCD馬券術～. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wakurenInput = document.getElementById('wakurenInput');
+            const tanshoInput = document.getElementById('tanshoInput');
+            const umarenInput = document.getElementById('umarenInput');
+            const analyzeButton = document.getElementById('analyzeButton');
+            const abcdResult = document.getElementById('abcdResult');
+            const combinationResult = document.getElementById('combinationResult');
+
+            analyzeButton.addEventListener('click', () => {
+                try {
+                    // 入力データの取得
+                    const wakurenData = wakurenInput.value.trim();
+                    const tanshoData = tanshoInput.value.trim();
+                    const umarenData = umarenInput.value.trim();
+
+                    // データの検証
+                    if (!wakurenData || !tanshoData || !umarenData) {
+                        showError('すべてのデータを入力してください。');
+                        return;
+                    }
+
+                    // データ解析の実行
+                    const analysisResult = analyzeAllData(wakurenData, tanshoData, umarenData);
+                    
+                    if (analysisResult.success) {
+                        displayABCDResult(analysisResult.abcdHorses);
+                        displayCombinationResult(analysisResult.combinations);
+                    } else {
+                        showError(analysisResult.error);
+                    }
+                } catch (error) {
+                    showError('データ処理中にエラーが発生しました: ' + error.message);
+                }
+            });
+
+            function analyzeAllData(wakurenData, tanshoData, umarenData) {
+                try {
+                    // 1. 枠連データの解析（1-10人気）
+                    const wakurenResult = parseWakurenData(wakurenData);
+                    if (!wakurenResult.success) {
+                        return { success: false, error: '枠連データの解析に失敗しました: ' + wakurenResult.error };
+                    }
+
+                    // 2. 単勝データの解析（枠番と馬番の対応）
+                    const tanshoResult = parseTanshoData(tanshoData);
+                    if (!tanshoResult.success) {
+                        return { success: false, error: '単勝データの解析に失敗しました: ' + tanshoResult.error };
+                    }
+
+                    // 3. 馬連データの解析（馬番出現頻度）
+                    const umarenResult = parseUmarenData(umarenData);
+                    if (!umarenResult.success) {
+                        return { success: false, error: '馬連データの解析に失敗しました: ' + umarenResult.error };
+                    }
+
+                    // 4. ABCD評価馬の決定
+                    const abcdHorses = determineABCDHorses(umarenResult.horseCounts, tanshoResult.wakubanMapping);
+
+                    // 5. 馬連組み合わせの生成
+                    const combinations = generateCombinations(wakurenResult.popularWakubans, tanshoResult.wakubanMapping);
+
+                    return {
+                        success: true,
+                        abcdHorses: abcdHorses,
+                        combinations: combinations
+                    };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            }
+
+            function parseWakurenData(rawData) {
+                try {
+                    const lines = rawData.split('\n');
+                    const popularWakubans = [];
+                    let headerFound = false;
+                    let rankIndex = -1, kumibanIndex = -1;
+
+                    for (const line of lines) {
+                        if (line.trim() === '' || line.includes('人気上位から') || line.includes('上位')) {
+                            continue;
+                        }
+
+                        const parts = line.split('\t');
+
+                        if (!headerFound) {
+                            if (parts.includes('人気') && parts.includes('組番')) {
+                                rankIndex = parts.indexOf('人気');
+                                kumibanIndex = parts.indexOf('組番');
+                                headerFound = true;
+                                continue;
+                            }
+                        }
+
+                        if (!headerFound || rankIndex === -1 || kumibanIndex === -1) {
+                            continue;
+                        }
+
+                        if (parts.length > Math.max(rankIndex, kumibanIndex)) {
+                            const rank = parseInt(parts[rankIndex], 10);
+                            const kumiban = parts[kumibanIndex];
+
+                            if (rank >= 1 && rank <= 10 && kumiban && kumiban.includes('-')) {
+                                popularWakubans.push({
+                                    rank: rank,
+                                    kumiban: kumiban,
+                                    wakubans: kumiban.split('-').map(Number)
+                                });
+                            }
+                        }
+                    }
+
+                    if (popularWakubans.length === 0) {
+                        return { success: false, error: '1-10人気の有効な枠連データが見つかりませんでした。' };
+                    }
+
+                    return { success: true, data: popularWakubans, popularWakubans: popularWakubans };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            }
+
+            function parseTanshoData(rawData) {
+                try {
+                    const lines = rawData.split('\n');
+                    const wakubanMapping = {}; // 枠番 -> 馬番の配列
+                    let headerFound = false;
+                    let wakubanIndex = -1, umabanIndex = -1, umameiIndex = -1;
+
+                    for (const line of lines) {
+                        if (line.trim() === '') {
+                            continue;
+                        }
+
+                        const parts = line.split('\t');
+
+                        if (!headerFound) {
+                            if (parts.includes('枠') && parts.includes('馬番') && parts.includes('馬名')) {
+                                wakubanIndex = parts.indexOf('枠');
+                                umabanIndex = parts.indexOf('馬番');
+                                umameiIndex = parts.indexOf('馬名');
+                                headerFound = true;
+                                continue;
+                            }
+                        }
+
+                        if (!headerFound || wakubanIndex === -1 || umabanIndex === -1 || umameiIndex === -1) {
+                            continue;
+                        }
+
+                        if (parts.length > Math.max(wakubanIndex, umabanIndex, umameiIndex)) {
+                            const wakubanText = parts[wakubanIndex];
+                            const umaban = parseInt(parts[umabanIndex], 10);
+                            const umamei = parts[umameiIndex];
+
+                            if (wakubanText && !isNaN(umaban) && umamei) {
+                                const wakubanNum = parseInt(wakubanText.match(/\d+/)[0], 10);
+                                
+                                if (!wakubanMapping[wakubanNum]) {
+                                    wakubanMapping[wakubanNum] = [];
+                                }
+                                wakubanMapping[wakubanNum].push({
+                                    umaban: umaban,
+                                    umamei: umamei
+                                });
+                            }
+                        }
+                    }
+
+                    if (Object.keys(wakubanMapping).length === 0) {
+                        return { success: false, error: '有効な単勝データが見つかりませんでした。' };
+                    }
+
+                    return { success: true, data: wakubanMapping, wakubanMapping: wakubanMapping };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            }
+
+            function parseUmarenData(rawData) {
+                try {
+                    const lines = rawData.split('\n');
+                    const horseCounts = {};
+                    let totalHorseOccurrences = 0;
+                    let headerFound = false;
+                    let kumibanIndex = -1;
+
+                    for (const line of lines) {
+                        if (line.trim() === '' || line.includes('人気上位から') || line.includes('上位') || line.includes('連オッズ')) {
+                            continue;
+                        }
+
+                        const parts = line.split('\t');
+
+                        if (!headerFound) {
+                            if (parts.includes('人気') && parts.includes('組番') && parts.includes('オッズ')) {
+                                kumibanIndex = parts.indexOf('組番');
+                                headerFound = true;
+                                continue;
+                            }
+                        }
+
+                        if (!headerFound || kumibanIndex === -1) {
+                            continue;
+                        }
+
+                        if (parts.length > kumibanIndex) {
+                            const kumiban = parts[kumibanIndex];
+
+                            if (kumiban && kumiban.includes('-')) {
+                                const horseNumbers = kumiban.split('-').map(Number);
+
+                                for (const horseNum of horseNumbers) {
+                                    if (!isNaN(horseNum)) {
+                                        horseCounts[horseNum] = (horseCounts[horseNum] || 0) + 1;
+                                        totalHorseOccurrences++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (totalHorseOccurrences === 0) {
+                        return { success: false, error: '有効な馬連データが見つかりませんでした。' };
+                    }
+
+                    return { success: true, data: horseCounts, horseCounts: horseCounts, totalOccurrences: totalHorseOccurrences };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            }
+
+            function determineABCDHorses(horseCounts, wakubanMapping) {
+                // 馬番を出現頻度順にソート
+                const sortedHorses = Object.entries(horseCounts)
+                    .map(([horseNum, count]) => ({
+                        horseNumber: parseInt(horseNum, 10),
+                        count: count
+                    }))
+                    .sort((a, b) => b.count - a.count);
+
+                // 上位馬から枠番を特定し、ABCD枠を決定
+                const usedWakubans = new Set();
+                const abcdFrames = { A: null, B: null, C: null, D: null };
+                const frameLabels = ['A', 'B', 'C', 'D'];
+                let frameIndex = 0;
+
+                for (const horse of sortedHorses) {
+                    if (frameIndex >= 4) break;
+
+                    // この馬がどの枠に属するかを調べる
+                    let horseWakuban = null;
+                    for (const [wakuban, horses] of Object.entries(wakubanMapping)) {
+                        if (horses.some(h => h.umaban === horse.horseNumber)) {
+                            horseWakuban = parseInt(wakuban, 10);
+                            break;
+                        }
+                    }
+
+                    // まだ使われていない枠番の場合、ABCD枠として採用
+                    if (horseWakuban && !usedWakubans.has(horseWakuban)) {
+                        usedWakubans.add(horseWakuban);
+                        abcdFrames[frameLabels[frameIndex]] = {
+                            wakuban: horseWakuban,
+                            topHorse: horse,
+                            allHorses: wakubanMapping[horseWakuban] || []
+                        };
+                        frameIndex++;
+                    }
+                }
+
+                return abcdFrames;
+            }
+
+            function generateCombinations(popularWakubans, wakubanMapping) {
+                const combinations = [];
+                
+                // 1-10人気の枠連から枠番を取得
+                const wakubanPairs = popularWakubans.map(item => item.wakubans);
+
+                for (const wakubanPair of wakubanPairs) {
+                    const [waku1, waku2] = wakubanPair;
+                    const horses1 = wakubanMapping[waku1] || [];
+                    const horses2 = wakubanMapping[waku2] || [];
+
+                    // 同じ枠番の場合（例：3-3）の処理
+                    if (waku1 === waku2) {
+                        // 同じ枠内の馬同士の全組み合わせを生成
+                        for (let i = 0; i < horses1.length; i++) {
+                            for (let j = i + 1; j < horses1.length; j++) {
+                                const horse1 = horses1[i];
+                                const horse2 = horses1[j];
+                                const combination = [horse1.umaban, horse2.umaban].sort((a, b) => a - b);
+                                combinations.push({
+                                    kumiban: `${combination[0]}-${combination[1]}`,
+                                    wakuban: `${waku1}-${waku2}`,
+                                    horses: [
+                                        { umaban: horse1.umaban, umamei: horse1.umamei },
+                                        { umaban: horse2.umaban, umamei: horse2.umamei }
+                                    ]
+                                });
+                            }
+                        }
+                    } else {
+                        // 異なる枠番の場合の処理
+                        for (const horse1 of horses1) {
+                            for (const horse2 of horses2) {
+                                const combination = [horse1.umaban, horse2.umaban].sort((a, b) => a - b);
+                                combinations.push({
+                                    kumiban: `${combination[0]}-${combination[1]}`,
+                                    wakuban: `${waku1}-${waku2}`,
+                                    horses: [
+                                        { umaban: horse1.umaban, umamei: horse1.umamei },
+                                        { umaban: horse2.umaban, umamei: horse2.umamei }
+                                    ]
+                                });
+                            }
+                        }
+                    }
+                }
+
+                // 重複除去
+                const uniqueCombinations = combinations.filter((combination, index, self) => 
+                    index === self.findIndex(c => c.kumiban === combination.kumiban)
+                );
+
+                return uniqueCombinations;
+            }
+
+            function displayABCDResult(abcdHorses) {
+                let html = '<h3 class="text-2xl font-semibold text-yellow-700 mb-6">ABCD評価馬一覧</h3>';
+                
+                const frameClasses = { A: 'waku-a', B: 'waku-b', C: 'waku-c', D: 'waku-d' };
+                
+                for (const [frame, data] of Object.entries(abcdHorses)) {
+                    if (data) {
+                        html += `<div class="waku-card ${frameClasses[frame]}">`;
+                        html += `<div class="flex items-center justify-between mb-3">`;
+                        html += `<h4 class="text-xl font-bold text-gray-800">${frame}枠 (枠番${data.wakuban})</h4>`;
+                        html += `<span class="text-sm bg-gray-100 px-2 py-1 rounded-full">出現${data.topHorse.count}回</span>`;
+                        html += `</div>`;
+                        html += `<p class="text-sm text-gray-600 mb-3">トップ馬: ${data.topHorse.horseNumber}番</p>`;
+                        html += `<div class="text-sm">`;
+                        html += `<span class="font-semibold text-gray-700">該当馬番: </span>`;
+                        const horseList = data.allHorses.map(horse => `${horse.umaban}番(${horse.umamei})`).join(', ');
+                        html += `<span class="text-gray-600">${horseList}</span>`;
+                        html += `</div></div>`;
+                    }
+                }
+
+                if (Object.values(abcdHorses).every(data => data === null)) {
+                    html += '<p class="error-message text-center py-8">ABCD枠を決定できませんでした。</p>';
+                }
+
+                abcdResult.innerHTML = html;
+            }
+
+            function displayCombinationResult(combinations) {
+                let html = '<h3 class="text-2xl font-semibold text-red-700 mb-6">馬連組み合わせ（1-10人気枠連基準）</h3>';
+                
+                if (combinations.length > 0) {
+                    // 組み合わせをグループ化
+                    const groupedCombinations = groupCombinations(combinations);
+                    
+                    html += `<p class="text-sm text-gray-600 mb-4">全${combinations.length}通りの組み合わせ（${groupedCombinations.length}パターン）</p>`;
+                    html += '<div class="combination-list">';
+                    
+                    groupedCombinations.forEach(group => {
+                        html += `<div class="combination-item">${group}</div>`;
+                    });
+                    
+                    html += '</div>';
+                } else {
+                    html += '<p class="error-message text-center py-8">組み合わせを生成できませんでした。</p>';
+                }
+
+                combinationResult.innerHTML = html;
+            }
+
+            function groupCombinations(combinations) {
+                const grouped = {};
+                
+                combinations.forEach(combo => {
+                    const parts = combo.kumiban.split('-');
+                    const first = parseInt(parts[0]);
+                    const second = parseInt(parts[1]);
+                    
+                    const key = Math.min(first, second);
+                    const value = Math.max(first, second);
+                    
+                    if (!grouped[key]) {
+                        grouped[key] = new Set();
+                    }
+                    grouped[key].add(value);
+                });
+                
+                const result = [];
+                Object.keys(grouped).sort((a, b) => parseInt(a) - parseInt(b)).forEach(key => {
+                    const values = Array.from(grouped[key]).sort((a, b) => a - b);
+                    if (values.length === 1) {
+                        result.push(`${key}-${values[0]}`);
+                    } else {
+                        result.push(`${key}-${values.join(',')}`);
+                    }
+                });
+                
+                return result;
+            }
+
+            function showError(message) {
+                abcdResult.innerHTML = `<div class="text-center py-8"><p class="error-message">${message}</p></div>`;
+                combinationResult.innerHTML = `<div class="text-center py-8"><p class="error-message">${message}</p></div>`;
+            }
+        });
+    </script>
+</body>
+</html>
